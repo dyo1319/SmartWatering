@@ -22,4 +22,26 @@ router.get('/state',async(req,res) => {
     }
 });
 
+
+router.post('/sensor-data', async (req, res) => {
+    const { id_sensor, id_plant, value } = req.body; 
+
+    if (!id_sensor || !id_plant || value === undefined) {
+        return res.status(400).send('Missing required fields: id_sensor, id_plant, value');
+    }
+
+    try {
+        await pool.query(
+            'INSERT INTO datasensor (id_sensors, id_threes, avg, date) VALUES (?, ?, ?, NOW())',
+            [id_sensor, id_plant, value]
+        );
+
+        console.log(`Data saved: Sensor ID=${id_sensor}, Plant ID=${id_plant}, Value=${value}`);
+        res.status(200).send('Sensor data saved successfully');
+    } catch (err) {
+        console.error('Error saving data:', err);
+        res.status(500).send('Failed to save sensor data');
+    }
+});
+
 module.exports = router;
