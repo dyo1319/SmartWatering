@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 const app = express();
-const HTTP_PORT = 3000;
+const HTTP_PORT = 4002;
 
 dotenv.config();
 
@@ -19,3 +19,9 @@ app.listen(HTTP_PORT, () => {
 
 const esp = require('./routes/esp');
 app.use('/esp', esp);
+
+
+app.get('/', (req, res) => {
+    res.send('Welcome to the SmartWater server!');
+});
+

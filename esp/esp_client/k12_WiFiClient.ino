@@ -2,8 +2,13 @@
 #include <WiFiClient.h>
 #include <HTTPClient.h>
 
-const char* ssid = "Kinneret College";
-const char* password = "0544933268";
+//const char* ssid = "Kinneret College";
+//const char* password = "0544933268";
+
+//const char* ssid = "+FATTAL_FREE_WIFI";
+
+const char* ssid = "iPhone (6)";
+const char* password = "95175386240";
 
 WiFiClient client;
 
@@ -22,7 +27,7 @@ void sendData(float temp, int linght, int moisture){
   String dataUrl = "temp=" + String(temp);
   dataUrl+= "&linght="+ String(linght);
   dataUrl+= "&moisture="+ String(moisture);
-  http.begin(client, "http://10.9.0.249:3000/esp?" + dataUrl );
+  http.begin(client, "http://172.20.10.2:4002/esp?" + dataUrl );
 
    int httpCode = http.GET();
    if(httpCode == HTTP_CODE_OK) {

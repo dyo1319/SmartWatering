@@ -1,12 +1,12 @@
 #include <DHT.h>
 
 #define dhtPin 16
-#define DHTTYPE DHT22
+#define DHTTYPE DHT11
 
 DHT dht(dhtPin, DHTTYPE);
 
-#define lightSensor 36
-#define MoistureSensore 39
+#define lightSensor 34
+#define MoistureSensore 36
 
 void setup() {
   // put your setup code here, to run once:
