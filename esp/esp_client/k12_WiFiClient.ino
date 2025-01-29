@@ -2,10 +2,8 @@
 #include <WiFiClient.h>
 #include <HTTPClient.h>
 
+// WiFi credentials
 //const char* ssid = "Kinneret College";
-//const char* password = "0544933268";
-
-//const char* ssid = "+FATTAL_FREE_WIFI";
 
 const char* ssid = "iPhone (6)";
 const char* password = "95175386240";
@@ -39,3 +37,5 @@ void sendData(float temp, int linght, int moisture){
     }
     http.end();
 }
+
+
