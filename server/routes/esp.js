@@ -25,22 +25,6 @@ router.post('/state', (req, res) => {
     res.send(`State updated to ${state}`);
 });
 
-/*
-router.get('/state',async(req,res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM threes WHERE id_plants = ?', [1]);
-    
-        if(rows.length > 0) {
-            res.status(200).json(rows[0]);
-        } else {
-            res.status(404).send('no state found for  the specified plant ID');
-        }
-    } catch (err) {
-        console.error('Error fetching state:', err);
-        res.status(500).send('Error fetching state');
-    }
-});
-*/
 
 router.post('/sensor-data', async (req, res) => {
     const { id_sensor, id_plant, value } = req.body; 
