@@ -1,0 +1,7 @@
+{
+    "temperature_config": {
+        "desired_temp": 15,
+        "high_temp_duration": 10,
+        "low_temp_duration": 5
+    }
+}

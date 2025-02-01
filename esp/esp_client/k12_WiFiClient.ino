@@ -5,8 +5,11 @@
 // WiFi credentials
 //const char* ssid = "Kinneret College";
 
-const char* ssid = "iPhone (6)";
-const char* password = "95175386240";
+//const char* ssid = "iPhone (6)";
+//const char* password = "95175386240";
+
+const char* ssid = "RaadHeno";
+const char* password = "Raad12340";
 
 WiFiClient client;
 
@@ -39,3 +42,19 @@ void sendData(float temp, int linght, int moisture){
 }
 
 
+int GetState() {
+  int ret = -1;
+  HTTPClient http;
+  http.begin(client, "http://172.20.10.2:4002/esp/state");
+  int httpCode = http.GET();
+  Serial.println(httpCode);
+  if(httpCode == HTTP_CODE_OK) {
+    Serial.print("HTTP respone code");
+    Serial.println(httpCode);
+    String Res = http.getString();
+    Serial.println(Res);
+    ret = Res.toInt();
+  }
+  http.end();
+  return ret;
+}
