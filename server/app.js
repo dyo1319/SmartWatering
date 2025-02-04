@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
-const fs = require('fs');
+const fs = require('fs').promises;
 const HTTP_PORT = 4002;
 
 dotenv.config();
@@ -18,32 +18,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 // JSON FILE LOCATION
 const filePath = path.join(__dirname, 'Inside_information.json');
 
-function saveDataToFile(data) {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 4), 'utf8');
+
+async function saveDataToFile(data) {
+    await fs.writeFile(filePath, JSON.stringify(data, null, 4), 'utf8');
 }
 
-app.post('/user/config/temperature', (req, res) => {
+app.post('/user/config/temperature', async (req, res) => {
     const { desired_temp, high_temp_duration, low_temp_duration } = req.body;
 
     if (!desired_temp || !high_temp_duration || !low_temp_duration) {
-        return res.status(400).json({ error: "missing data" });
+        return res.status(400).json({ error: "Missing data fields!" });
     }
 
-    let data = {};
-    if (fs.existsSync(filePath)) {
-        const fileContent = fs.readFileSync(filePath, 'utf8');
-        if (fileContent.trim()) { 
-            data = JSON.parse(fileContent);
+    try {
+        let data = {};
+        if (await fs.readFile(filePath, 'utf8')) {
+            data = JSON.parse(await fs.readFile(filePath, 'utf8'));
         }
-    }
 
-    data.temperature_config = {
-        desired_temp: desired_temp,
-        high_temp_duration: high_temp_duration,
-        low_temp_duration: low_temp_duration
-    };
-    saveDataToFile(data);
-    res.json({ success: true, message: "Data saved successfully!" });
+        data.temperature_config = { desired_temp, high_temp_duration, low_temp_duration };
+        await saveDataToFile(data);
+        res.json({ success: true, message: "Data saved successfully!" });
+    } catch (error) {
+        console.error("Error saving data:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 app.get('/', (req, res) => {

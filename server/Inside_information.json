@@ -1,7 +1,9 @@
 {
+    "state": 64,
     "temperature_config": {
-        "desired_temp": 15,
-        "high_temp_duration": 10,
+        "desired_temp": 5,
+        "high_temp_duration": 5,
         "low_temp_duration": 5
-    }
+    },
+    "manual_command": "on"
 }

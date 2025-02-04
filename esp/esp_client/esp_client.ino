@@ -5,8 +5,8 @@
 //----- pins ---------
 #define lightSensor 34
 #define MoistureSensore 36
-#define dhtPin 127366
-#define pump 19
+#define dhtPin 16
+#define pump 18
 
 
 //---- General data -----
@@ -18,9 +18,7 @@ int light;
 int minutes = (1000 * 60);
 float temp;
 int minT,maxT;
-bool isOnPump;
 int countOn = 0;
-
 
 
 //--------- State machine ----------
@@ -42,14 +40,14 @@ void setup() {
   pinMode(pump,OUTPUT);
   WiFi_SETUP();
   dht.begin();
-  isOnPump = true;
   statusCheckTime = millis();
 }
 
 void loop() {
   // Update current state every 10 minutes
-  if((millis() - statusCheckTime) > (10 * minutes)) {
+  if((millis() - statusCheckTime) > (1 * minutes)) {
     CurrentStatus = GetState();
+    Serial.println(CurrentStatus);
     statusCheckTime = millis();
   }
     switch (CurrentStatus) {
@@ -65,14 +63,34 @@ void loop() {
         case MANUAL_MODE: 
             HandleManualMode();
             break;
-        default:
-            Serial.println("unknown state");
-            break;
+       default:
+        break;
     }
   delay(500);
 }
 
-void HandleManualMode() { }
-void HandleShabbatMode() {}
-void HandleMoistureMode() {}
-void HandleTemperatureMode() {}
+
+// ---- HANDLE MANUAL MODE ----
+void HandleManualMode() {
+  static String lastCommand = "";
+
+  String manualCommand = GetManualCommand();
+  if (manualCommand == lastCommand) {
+    return;
+  }
+
+  Serial.println("New manual command received: " + manualCommand);
+  delay(3000); 
+
+  static bool isPumpOn = false;
+if (manualCommand == "on" && !isPumpOn) {
+    Serial.println("Turning Pump ON...");
+    digitalWrite(pump, HIGH);
+    isPumpOn = true;
+} else if (manualCommand == "off" && isPumpOn) {
+    Serial.println("Turning Pump OFF...");
+    digitalWrite(pump, LOW);
+    isPumpOn = false;
+}
+  lastCommand = manualCommand;
+}

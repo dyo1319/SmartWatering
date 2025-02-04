@@ -16,5 +16,8 @@
     "express": "^4.21.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.5"
+  },
+  "nodemonConfig": {
+    "ignore": ["Inside_information.json"]
   }
 }
